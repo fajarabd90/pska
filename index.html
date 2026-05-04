@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <title>PSKA SDIT Al Manar 2026</title>
+    <link rel="icon" type="image/x-icon" href="almanar.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google Fonts & Bootstrap 5 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --primary-green: #2ecc71;
+        --dark-green: #27ae60;
+        --light-bg: #f8f9fa;
+      }
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: var(--light-bg);
+        color: #2d3436;
+      }
+
+      /* Header Modern */
+      .hero-section {
+        background: linear-gradient(
+          135deg,
+          var(--primary-green),
+          var(--dark-green)
+        );
+        color: white;
+        padding: 60px 0;
+        border-bottom-left-radius: 50px;
+        border-bottom-right-radius: 50px;
+        box-shadow: 0 10px 30px rgba(46, 204, 113, 0.2);
+      }
+
+      /* Card Instruksi Modern */
+      .instruction-card {
+        background: white;
+        border: none;
+        border-radius: 24px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+        margin-top: -40px;
+        transition: transform 0.3s ease;
+      }
+
+      /* Tabel Jadwal Modern */
+      .table-container {
+        background: white;
+        border-radius: 20px;
+        padding: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+      }
+
+      .table thead th {
+        background-color: #add8e6 !important; /* Biru muda sesuai jadwal */
+        color: #2c3e50;
+        border: none;
+        padding: 15px;
+      }
+
+      .table-bordered td,
+      .table-bordered th {
+        border: 1px solid #edf2f7;
+        vertical-align: middle;
+      }
+
+      /* Tombol Ujian */
+      .btn-exam {
+        border-radius: 12px;
+        padding: 8px 20px;
+        font-weight: 600;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+      }
+
+      .btn-exam.disabled {
+        background-color: #dfe6e9;
+        border-color: #dfe6e9;
+        color: #b2bec3;
+      }
+
+      /* Highlight Hari Aktif */
+      .current-day-col {
+        background-color: #fff9c4 !important;
+        border: 2px solid #fbc02d !important;
+      }
+
+      .status-badge {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+        border-radius: 20px;
+        display: block;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero-section text-center">
+      <div class="container">
+        <img src="almanar.png" width="100" class="mb-3" alt="Logo" />
+        <h1 class="fw-800">PSKA SDIT Al Manar 2026</h1>
+        <p class="lead opacity-75">Portal Ujian Online Terpadu</p>
+      </div>
+    </header>
+
+    <main class="container mb-5">
+      <!-- Bagian Harap Diperhatikan -->
+      <div class="row justify-content-center">
+        <div class="col-lg-10">
+          <div class="card instruction-card p-4 p-md-5">
+            <h3 class="text-danger fw-bold mb-4">
+              <i class="fas fa-exclamation-circle me-2"></i> HARAP DIPERHATIKAN
+            </h3>
+            <div class="row g-4">
+              <div class="col-md-6">
+                <ul class="list-unstyled">
+                  <li class="mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    Berdoalah sebelum mengerjakan soal.
+                  </li>
+                  <li class="mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    Periksa dan bacalah soal dengan teliti.
+                  </li>
+                  <li class="mb-3">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    Kerjakan soal yang dianggap mudah.
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <ul class="list-unstyled">
+                  <li class="mb-3">
+                    <i class="fas fa-clock text-primary me-2"></i> Waktu
+                    pengerjaan: 90 - 120 Menit.
+                  </li>
+                  <li class="mb-3">
+                    <i class="fas fa-save text-primary me-2"></i> Pastikan
+                    mengklik tombol simpan di akhir.
+                  </li>
+                  <li class="mb-3">
+                    <i class="fas fa-mobile-alt text-primary me-2"></i> Gunakan
+                    perangkat dengan waktu sinkron.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bagian Jadwal -->
+      <div class="mt-5 pt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold m-0">Jadwal Ujian</h2>
+          <div id="live-clock" class="badge bg-dark p-2 fs-6"></div>
+        </div>
+
+        <div class="table-container table-responsive">
+          <table class="table table-bordered text-center align-middle">
+            <thead>
+              <tr>
+                <th width="15%">Waktu</th>
+                <th id="col-2026-04-30">
+                  Kamis<br /><small>30 April 2026</small>
+                </th>
+                <th id="col-2026-05-04">
+                  Senin<br /><small>4 Mei 2026</small>
+                </th>
+                <th id="col-2026-05-05">
+                  Selasa<br /><small>5 Mei 2026</small>
+                </th>
+                <th id="col-2026-05-06">Rabu<br /><small>6 Mei 2026</small></th>
+                <th id="col-2026-05-07">
+                  Kamis<br /><small>7 Mei 2026</small>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="background-color: #fdf2f7">
+                <td class="fw-bold">07.30 - 07.45</td>
+                <td colspan="5" class="text-muted italic">
+                  Murojaah Bersama Walas
+                </td>
+              </tr>
+              <tr>
+                <td class="fw-bold">07.45 - 09.15</td>
+                <td>
+                  <button
+                    id="btn-2026-05-03-1"
+                    class="btn btn-exam btn-secondary disabled w-100"
+                  >
+                    SKI
+                  </button>
+                </td>
+                <td>
+                  <button
+                    id="btn-2026-05-04-1"
+                    class="btn btn-exam btn-secondary disabled w-100"
+                  >
+                    PAI
+                  </button>
+                </td>
+                <td>
+                  <button
+                    id="btn-2026-05-05-1"
+                    class="btn btn-exam btn-secondary disabled w-100"
+                  >
+                    B. Indonesia
+                  </button>
+                </td>
+                <td>
+                  <button
+                    id="btn-2026-05-06-1"
+                    class="btn btn-exam btn-secondary disabled w-100"
+                  >
+                    B. Inggris
+                  </button>
+                </td>
+                <td>
+                  <button
+                    id="btn-2026-05-07-1"
+                    class="btn btn-exam btn-secondary disabled w-100"
+                  >
+                    IPAS
+                  </button>
+                </td>
+              </tr>
+              <tr style="background-color: #e0ffff">
+                <td class="fw-bold">09.15 - 09.30</td>
+                <td
+                  colspan="5"
+                  class="text-uppercase small fw-bold text-primary"
+                >
+                  Istirahat
+                </td>
+              </tr>
+              <tr>
+                <td class="fw-bold">09.30 - 11.00</td>
+                <td>
+                  <button
+                    id="btn-2026-05-04-3"
+                    class="btn btn-exam btn-secondary disabled w-100"
+                  >
+                    B. Arab
+                  </button>
+                </td>
+                <td>
+                  <button
+                    id="btn-2026-05-04-2"
+                    class="btn btn-exam btn-secondary disabled w-100"
+                  >
+                    Pancasila
+                  </button>
+                </td>
+                <td>
+                  <button
+                    id="btn-2026-05-05-2"
+                    class="btn btn-exam btn-secondary disabled w-100"
+                  >
+                    PLBJ
+                  </button>
+                </td>
+                <td>
+                  <button
+                    id="btn-2026-05-06-2"
+                    class="btn btn-exam btn-secondary disabled w-100"
+                  >
+                    Matematika
+                  </button>
+                </td>
+                <td class="text-muted">-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <footer class="text-center py-4 text-muted border-top bg-white">
+      <p>&copy; 2026 SDIT Al Manar - Panitia PSKA Online</p>
+    </footer>
+
+    <script>
+      function updateUjian() {
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString("id-ID");
+        document.getElementById("live-clock").innerHTML =
+          `<i class="fas fa-clock me-2"></i>${timeStr}`;
+
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+        const dd = String(now.getDate()).padStart(2, "0");
+        const tglSekarang = `${yyyy}-${mm}-${dd}`;
+        const jamMenit = now.getHours() * 100 + now.getMinutes();
+
+        // Highlight Kolom Hari Ini
+        const activeCol = document.getElementById(`col-${tglSekarang}`);
+        if (activeCol) activeCol.classList.add("current-day-col");
+
+        // Data Jadwal dari Screenshot
+        const jadwal = [
+          {
+            tgl: "2026-04-30",
+            sesi: 1,
+            mulai: 745,
+            selesai: 915,
+            mapel: "SKI",
+            url: "to_pska_ski.html",
+          },
+          {
+            tgl: "2026-05-04",
+            sesi: 3,
+            mulai: 930,
+            selesai: 1100,
+            mapel: "B. Arab",
+            url: "to_pska_arab.html",
+          },
+          {
+            tgl: "2026-05-04",
+            sesi: 1,
+            mulai: 700,
+            selesai: 915,
+            mapel: "PAI",
+            url: "to_pska_pai.html",
+          },
+          {
+            tgl: "2026-05-04",
+            sesi: 2,
+            mulai: 930,
+            selesai: 1100,
+            mapel: "Pancasila",
+            url: "to_pska_pancasila.html",
+          },
+          {
+            tgl: "2026-05-05",
+            sesi: 1,
+            mulai: 745,
+            selesai: 915,
+            mapel: "B. Indo",
+            url: "to_pska_indo.html",
+          },
+          {
+            tgl: "2026-05-05",
+            sesi: 2,
+            mulai: 930,
+            selesai: 1100,
+            mapel: "PLBJ",
+            url: "to_pska_plbj.html",
+          },
+          {
+            tgl: "2026-05-06",
+            sesi: 1,
+            mulai: 745,
+            selesai: 915,
+            mapel: "B. Inggris",
+            url: "to_pska_inggris.html",
+          },
+          {
+            tgl: "2026-05-06",
+            sesi: 2,
+            mulai: 930,
+            selesai: 1130,
+            mapel: "MTK",
+            url: "to_pska_mtk.html",
+          },
+          {
+            tgl: "2026-05-07",
+            sesi: 1,
+            mulai: 745,
+            selesai: 915,
+            mapel: "IPAS",
+            url: "to_pska_ipas.html",
+          },
+        ];
+
+        jadwal.forEach((item) => {
+          const btn = document.getElementById(`btn-${item.tgl}-${item.sesi}`);
+          if (btn) {
+            if (
+              tglSekarang === item.tgl &&
+              jamMenit >= item.mulai &&
+              jamMenit <= item.selesai
+            ) {
+              btn.classList.replace("btn-secondary", "btn-success");
+              btn.classList.remove("disabled");
+              btn.innerHTML = `<i class="fas fa-play me-2"></i>MULAI ${item.mapel}`;
+              btn.onclick = () => (window.location.href = item.url);
+            }
+          }
+        });
+      }
+
+      setInterval(updateUjian, 1000);
+      window.onload = updateUjian;
+    </script>
+  </body>
+</html>
