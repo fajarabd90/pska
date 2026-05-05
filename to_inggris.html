@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <!-- 
+      ==========================================
+      1. KONFIGURASI UTAMA (EDIT DI SINI)
+      ==========================================
+    -->
+    <script>
+      const EXAM_CONFIG = {
+        namaMapel: "B. Inggris - TO PSKA 2026",
+        // Masukkan hanya ID Google Form (karakter panjang di antara /d/ dan /viewform)
+        // <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSeBkfEUYfiz63sGGnbuMc4SrQ5_4KA35UeyvjcPSMqnGbr6NA/viewform?embedded=true" width="640" height="11313" frameborder="0" marginheight="0" marginwidth="0">Memuat…</iframe>
+        idGForm: "1FAIpQLSeBkfEUYfiz63sGGnbuMc4SrQ5_4KA35UeyvjcPSMqnGbr6NA",
+        folderSoal: "to-inggris",
+        jumlahHalaman: 8,
+        durasiMenit: 90,
+      };
+    </script>
+
+    <title id="title-tag">UJIAN ONLINE</title>
+    <link rel="icon" type="image/x-icon" href="almanar.png" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      :root {
+        --primary-color: #2ecc71;
+        --dark-bg: #1e272e;
+      }
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+        background-color: #f0f2f5;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+      }
+      .navbar-exam {
+        height: 60px;
+        background: var(--dark-bg);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 25px;
+      }
+      .timer-badge {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 5px 15px;
+        border-radius: 10px;
+        color: var(--primary-color);
+        font-weight: 700;
+      }
+      .content-wrapper {
+        display: flex;
+        height: calc(100vh - 60px);
+        width: 100%;
+        padding: 12px;
+        gap: 10px;
+      }
+      .cell {
+        height: 100%;
+        overflow-y: auto;
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      }
+      .gutter {
+        background-color: transparent;
+        cursor: col-resize;
+        width: 6px !important;
+      }
+      .responsive-img {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #eee;
+      }
+      #violation-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(214, 48, 49, 0.95);
+        color: white;
+        z-index: 9999;
+        text-align: center;
+        padding-top: 15%;
+      }
+    </style>
+  </head>
+
+  <body onclick="autoLock()">
+    <div id="violation-overlay">
+      <i class="fas fa-exclamation-triangle fa-5x mb-4"></i>
+      <h1>DILARANG PINDAH HALAMAN!</h1>
+      <p class="fs-4">Aktivitas Anda telah dicatat oleh sistem.</p>
+      <button class="btn btn-light fw-bold px-5" onclick="closeOverlay()">
+        KEMBALI KE UJIAN
+      </button>
+    </div>
+
+    <nav class="navbar-exam">
+      <div class="d-flex align-items-center">
+        <img src="almanar.png" width="35" class="me-3" />
+        <span class="fw-bold" id="display-mapel">MAPEL</span>
+      </div>
+      <div class="timer-badge">
+        <i class="fas fa-clock me-2"></i><span id="timer">00:00</span>
+      </div>
+    </nav>
+
+    <div class="content-wrapper">
+      <div id="left-panel" class="cell">
+        <div id="image-container"></div>
+      </div>
+      <div id="right-panel" class="cell">
+        <iframe
+          id="gform-iframe"
+          src=""
+          style="width: 100%; height: 100%; border: 0"
+          frameborder="0"
+          >Memuat…</iframe
+        >
+      </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/split.js/dist/split.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Build G-Form URL otomatis dari ID
+        const fullURL = `https://docs.google.com/forms/d/e/${EXAM_CONFIG.idGForm}/viewform?embedded=true`;
+
+        // Terapkan Config ke UI
+        document.getElementById("title-tag").innerText = EXAM_CONFIG.namaMapel;
+        document.getElementById("display-mapel").innerText =
+          EXAM_CONFIG.namaMapel;
+        document.getElementById("gform-iframe").src = fullURL;
+
+        // Render Gambar Soal
+        const container = document.getElementById("image-container");
+        for (let i = 1; i <= EXAM_CONFIG.jumlahHalaman; i++) {
+          const img = document.createElement("img");
+          img.src = `${EXAM_CONFIG.folderSoal}/halaman (${i}).jpg`;
+          img.className = "responsive-img";
+          container.appendChild(img);
+        }
+
+        // Timer
+        let sec = EXAM_CONFIG.durasiMenit * 60;
+        const timerDisplay = document.getElementById("timer");
+        setInterval(() => {
+          let min = Math.floor(sec / 60);
+          let remSec = sec % 60;
+          timerDisplay.innerHTML = `${min < 10 ? "0" : ""}${min}:${remSec < 10 ? "0" : ""}${remSec}`;
+          if (sec > 0) sec--;
+        }, 1000);
+
+        Split(["#left-panel", "#right-panel"], {
+          sizes: [50, 50],
+          minSize: 300,
+          gutterSize: 6,
+        });
+      });
+
+      function autoLock() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        }
+      }
+
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden)
+          document.getElementById("violation-overlay").style.display = "block";
+      });
+
+      function closeOverlay() {
+        document.getElementById("violation-overlay").style.display = "none";
+        autoLock();
+      }
+
+      document.addEventListener("contextmenu", (e) => e.preventDefault());
+      window.onbeforeunload = () => "Progres akan hilang!";
+    </script>
+  </body>
+</html>
