@@ -67,99 +67,66 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
+        padding: 25px;
       }
 
-      .card-monitor-header {
-        background: #ffffff;
-        padding: 15px 25px;
+      .table-responsive {
+        margin-top: 15px;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid #edf2f7;
+      }
+
+      .table {
+        margin-bottom: 0;
+      }
+
+      .table th {
+        background-color: #f8f9fa;
+        color: #4a5568;
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        padding: 15px;
+        border-bottom: 2px solid #edf2f7;
+      }
+
+      .table td {
+        padding: 15px;
+        vertical-align: middle;
+        color: #2d3436;
         border-bottom: 1px solid #edf2f7;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 10px;
       }
 
-      .iframe-wrapper {
-        position: relative;
-        flex: 1;
-        width: 100%;
-        min-height: 650px;
-        background: #fff;
+      .table tr:last-child td {
+        border-bottom: none;
       }
 
-      .iframe-wrapper iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: none;
+      .btn-buka {
+        background-color: var(--primary-green);
+        color: white;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.2s ease;
       }
 
-      .no-schedule-box {
-        flex: 1;
-        min-height: 650px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        background: #fdfefe;
-        color: #7f8c8d;
-        text-align: center;
-        padding: 40px;
+      .btn-buka:hover {
+        background-color: var(--dark-green);
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
       }
 
-      .no-schedule-icon {
-        font-size: 4rem;
-        color: #bdc3c7;
-        margin-bottom: 20px;
-        animation: float 3s ease-in-out infinite;
-      }
-
-      @keyframes float {
-        0%,
-        100% {
-          transform: translateY(0);
-        }
-        50% {
-          transform: translateY(-10px);
-        }
-      }
-
-      .pulse-indicator {
-        display: inline-block;
-        width: 10px;
-        height: 10px;
-        background-color: #2ecc71;
-        border-radius: 50%;
-        margin-right: 6px;
-        animation: pulse 1.5s infinite;
-      }
-
-      .pulse-indicator.off {
-        background-color: #95a5a6;
-        animation: none;
-      }
-
-      @keyframes pulse {
-        0% {
-          transform: scale(0.9);
-          box-shadow: 0 0 0 0 rgba(46, 204, 113, 0.7);
-        }
-        70% {
-          transform: scale(1);
-          box-shadow: 0 0 0 10px rgba(46, 204, 113, 0);
-        }
-        100% {
-          transform: scale(0.9);
-          box-shadow: 0 0 0 0 rgba(46, 204, 113, 0);
-        }
-      }
-
-      .info-text {
-        font-size: 0.75rem;
-        color: #7f8c8d;
+      /* Style tombol non-aktif */
+      .btn-buka.disabled,
+      .btn-buka:disabled {
+        background-color: #e2e8f0 !important;
+        color: #a0aec0 !important;
+        border-color: #e2e8f0 !important;
+        transform: none !important;
+        box-shadow: none !important;
+        cursor: not-allowed;
       }
     </style>
   </head>
@@ -176,7 +143,7 @@
             onerror="this.style.display = 'none'"
           />
           <div>
-            <h4 class="fw-bold m-0 text-white">Halaman Pantau Real-Time</h4>
+            <h4 class="fw-bold m-0 text-white">Halaman Pantau</h4>
             <p class="small m-0 opacity-75">ASKA SDIT Al Manar 2026</p>
           </div>
         </div>
@@ -190,101 +157,60 @@
 
     <main class="monitor-container container-fluid">
       <div class="card-monitor">
-        <div class="card-monitor-header">
-          <div class="d-flex flex-column gap-1">
-            <div class="d-flex align-items-center flex-wrap gap-2">
-              <span id="live-indicator" class="pulse-indicator"></span>
-              <span class="fw-bold text-dark small me-1"
-                >Jadwal Aktif:
-                <span id="current-mapel" class="text-success"
-                  >Mencari Jadwal...</span
-                >
-              </span>
-              <span
-                id="refresh-status"
-                class="badge bg-success-subtle text-success border border-success-subtle small fw-semibold px-2 py-1"
-              >
-                <i class="fas fa-check-circle me-1"></i>Diperbarui: Baru saja
-              </span>
-            </div>
-
-            <div
-              id="single-helper-text"
-              class="info-text d-none align-items-center gap-1 mt-1"
-              style="color: #d39e00 !important"
-            >
-              <i class="fas fa-info-circle"></i>
-              <span
-                >Data diperbarui otomatis per menit. Jika belum berubah, klik
-                tombol <strong class="text-danger">Reset Cache</strong>.</span
-              >
-            </div>
+        <div
+          class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2"
+        >
+          <div>
+            <h5 class="fw-bold m-0 text-dark">
+              Daftar Jadwal & Link Monitoring
+            </h5>
+            <p class="text-muted small m-0">
+              Silahkan pilih sesi ujian yang ingin dipantau
+            </p>
           </div>
-
-          <div class="d-flex gap-2 align-items-center">
-            <div id="live-clock" class="badge bg-dark p-2 fs-6 me-1"></div>
-            <button
-              id="btn-reset-cache"
-              onclick="hardResetCache()"
-              class="btn btn-sm btn-danger fw-bold rounded-pill px-3"
-            >
-              <i class="fas fa-trash-alt me-1"></i> Reset Cache
-            </button>
-          </div>
+          <div id="live-clock" class="badge bg-dark p-2 fs-6"></div>
         </div>
 
-        <div id="wrapper-area" class="iframe-wrapper" style="display: none">
-          <iframe id="sheet-iframe" src="about:blank"></iframe>
-        </div>
-
-        <div id="no-schedule-area" class="no-schedule-box">
-          <i class="fas fa-hourglass-half no-schedule-icon"></i>
-          <h4 class="fw-bold text-dark mb-2">Tidak Ada Jadwal Ujian Aktif</h4>
-          <p class="text-muted m-0 table-responsive">
-            Halaman pantau dinonaktifkan sementara. Lembar spreadsheet
-            monitoring akan otomatis muncul di sini begitu jam sesi ujian
-            dimulai sesuai Jadwal Ujian.
-          </p>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th style="width: 8%">No</th>
+                <th style="width: 25%">Hari & Tanggal</th>
+                <th style="width: 15%">Sesi / Waktu</th>
+                <th style="width: 27%">Mata Pelajaran</th>
+                <th style="width: 25%" class="text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tabel-jadwal-body"></tbody>
+          </table>
         </div>
       </div>
     </main>
 
     <footer class="text-center py-3 text-muted border-top bg-white small">
-      <p class="m-0">
-        &copy; 2026 SDIT Al Manar - Sistem Pantauan Ujian Terintegrasi
-      </p>
+      <p class="m-0">&copy; 2026 SDIT Al Manar - Panitia ASKA Online</p>
     </footer>
 
     <script>
-      const iframeElement = document.getElementById("sheet-iframe");
-      const wrapperArea = document.getElementById("wrapper-area");
-      const noScheduleArea = document.getElementById("no-schedule-area");
-      const liveIndicator = document.getElementById("live-indicator");
-      const btnResetCache = document.getElementById("btn-reset-cache");
-      const singleHelperText = document.getElementById("single-helper-text");
-
-      let idJadwalTerakhir = null;
+      const tabelBody = document.getElementById("tabel-jadwal-body");
 
       const jadwal = [
         {
           tgl: "2026-05-18",
           sesi: 1,
-          mulai: 745,
-          selesai: 915,
+          mulai: 745, // Jam 07:45
+          selesai: 915, // Jam 09:15
           mapel: "PAI",
-          spreadsheetId:
-            "2PACX-1vRSCbk0O6Z1fti8DF-c3gPBiclVIFcCwLcjctO2ieV0Uf5zBeUbET7xLsqmK3YF3sPYqHpfp8JyhJpE",
-          gid: "707335910",
+          link: "https://docs.google.com/spreadsheets/d/1yQGsRJVtxHR-BBU0NG774coc2tfn2uVAFULp_k3zsPY/edit?usp=sharing",
         },
         {
           tgl: "2026-05-18",
           sesi: 2,
-          mulai: 930,
+          mulai: 930, // Jam 09:30
           selesai: 1100,
           mapel: "Pancasila",
-          spreadsheetId:
-            "2PACX-1vSe7suLnn58xfow5Eu6jp7hnqnCOyp81kvFXm20eY_GWqnk7-8GR7liLy1V0zFwYrV907DcndEadiy7",
-          gid: "1946111312",
+          link: "https://docs.google.com/spreadsheets/d/1tWEMKBQ9r37comTV-N9Am-1yye9_GhxLexi2ky5WhTg/edit?usp=sharing",
         },
         {
           tgl: "2026-05-19",
@@ -292,9 +218,7 @@
           mulai: 745,
           selesai: 915,
           mapel: "B.Indonesia",
-          spreadsheetId:
-            "2PACX-1vRSCbk0O6Z1fti8DF-c3gPBiclVIFcCwLcjctO2ieV0Uf5zBeUbET7xLsqmK3YF3sPYqHpfp8JyhJpE",
-          gid: "MASUKKAN_GID_INDONESIA_DISINI",
+          link: "https://docs.google.com/spreadsheets/d/1mvVu9Y-XIOgX1J_NVqMTq9AM2P517d-OvF3MvcY9xIQ/edit?usp=sharing",
         },
         {
           tgl: "2026-05-19",
@@ -302,9 +226,7 @@
           mulai: 930,
           selesai: 1100,
           mapel: "SKI",
-          spreadsheetId:
-            "2PACX-1vRSCbk0O6Z1fti8DF-c3gPBiclVIFcCwLcjctO2ieV0Uf5zBeUbET7xLsqmK3YF3sPYqHpfp8JyhJpE",
-          gid: "MASUKKAN_GID_SKI_DISINI",
+          link: "https://docs.google.com/spreadsheets/d/1gjulFGXxSofYjdVIo9o1VefbKTQHJvk3bbcAR5rpoE8/edit?usp=sharing",
         },
         {
           tgl: "2026-05-20",
@@ -312,9 +234,7 @@
           mulai: 745,
           selesai: 915,
           mapel: "B.Inggris",
-          spreadsheetId:
-            "2PACX-1vRSCbk0O6Z1fti8DF-c3gPBiclVIFcCwLcjctO2ieV0Uf5zBeUbET7xLsqmK3YF3sPYqHpfp8JyhJpE",
-          gid: "MASUKKAN_GID_INGGRIS_DISINI",
+          link: "", // Isi jika link sudah siap
         },
         {
           tgl: "2026-05-20",
@@ -322,9 +242,7 @@
           mulai: 930,
           selesai: 1130,
           mapel: "Matematika",
-          spreadsheetId:
-            "2PACX-1vRSCbk0O6Z1fti8DF-c3gPBiclVIFcCwLcjctO2ieV0Uf5zBeUbET7xLsqmK3YF3sPYqHpfp8JyhJpE",
-          gid: "MASUKKAN_GID_MTK_DISINI",
+          link: "",
         },
         {
           tgl: "2026-05-21",
@@ -332,9 +250,7 @@
           mulai: 745,
           selesai: 915,
           mapel: "IPAS",
-          spreadsheetId:
-            "2PACX-1vRSCbk0O6Z1fti8DF-c3gPBiclVIFcCwLcjctO2ieV0Uf5zBeUbET7xLsqmK3YF3sPYqHpfp8JyhJpE",
-          gid: "MASUKKAN_GID_IPAS_DISINI",
+          link: "",
         },
         {
           tgl: "2026-05-21",
@@ -342,9 +258,7 @@
           mulai: 930,
           selesai: 1130,
           mapel: "PLBJ",
-          spreadsheetId:
-            "2PACX-1vRSCbk0O6Z1fti8DF-c3gPBiclVIFcCwLcjctO2ieV0Uf5zBeUbET7xLsqmK3YF3sPYqHpfp8JyhJpE",
-          gid: "MASUKKAN_GID_PLBJ_DISINI",
+          link: "",
         },
         {
           tgl: "2026-05-22",
@@ -352,155 +266,110 @@
           mulai: 745,
           selesai: 915,
           mapel: "B.Arab",
-          spreadsheetId:
-            "2PACX-1vRSCbk0O6Z1fti8DF-c3gPBiclVIFcCwLcjctO2ieV0Uf5zBeUbET7xLsqmK3YF3sPYqHpfp8JyhJpE",
-          gid: "MASUKKAN_GID_ARAB_DISINI",
+          link: "",
         },
       ];
 
-      function konversiKeMenit(waktuAngka) {
-        const jam = Math.floor(waktuAngka / 100);
-        const menit = waktuAngka % 100;
-        return jam * 60 + menit;
+      function formatHariTanggal(strTanggal) {
+        const opsi = {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        };
+        return new Date(strTanggal).toLocaleDateString("id-ID", opsi);
       }
 
-      function dapatkanJadwalSekarang() {
-        const sekarang = new Date();
-        const tahun = sekarang.getFullYear();
-        const bulan = String(sekarang.getMonth() + 1).padStart(2, "0");
-        const hari = String(sekarang.getDate()).padStart(2, "0");
-        const strTanggalSekarang = `${tahun}-${bulan}-${hari}`;
-
-        const menitSekarang = sekarang.getHours() * 60 + sekarang.getMinutes();
-
-        for (const item of jadwal) {
-          if (item.tgl === strTanggalSekarang) {
-            const menitMulai = konversiKeMenit(item.mulai);
-            const menitSelesai = konversiKeMenit(item.selesai);
-
-            if (menitSekarang >= menitMulai && menitSekarang <= menitSelesai) {
-              return item;
-            }
-          }
-        }
-        return null;
-      }
-
-      function formatTampilanJam(waktuAngka) {
+      function formatJam(waktuAngka) {
         const jam = String(Math.floor(waktuAngka / 100)).padStart(2, "0");
         const menit = String(waktuAngka % 100).padStart(2, "0");
         return `${jam}:${menit}`;
       }
 
-      function bangunUrlSpreadsheet(itemJadwal, tokenTambahan = "") {
-        let url = `https://docs.google.com/spreadsheets/d/e/${itemJadwal.spreadsheetId}/pubhtml?gid=${itemJadwal.gid}&single=true&widget=true&headers=false`;
-        if (tokenTambahan) {
-          url += `&${tokenTambahan}`;
-        }
-        return url;
-      }
+      function renderTabel() {
+        tabelBody.innerHTML = "";
 
-      function periksaDanUpdateTampilan() {
+        // Mengambil data tanggal dan jam saat ini
         const sekarang = new Date();
 
-        const timeStr = sekarang.toLocaleTimeString("id-ID");
-        document.getElementById("live-clock").innerHTML =
-          `<i class="fas fa-clock me-2"></i>${timeStr}`;
+        // Format YYYY-MM-DD lokal saat ini
+        const thn = sekarang.getFullYear();
+        const bln = String(sekarang.getMonth() + 1).padStart(2, "0");
+        const tgl = String(sekarang.getDate()).padStart(2, "0");
+        const tanggalSekarangStr = `${thn}-${bln}-${tgl}`;
 
-        const jadwalAktif = dapatkanJadwalSekarang();
-        const idJadwalSekarang = jadwalAktif
-          ? `${jadwalAktif.tgl}-Sesi${jadwalAktif.sesi}`
-          : "KOSONG";
+        // Format jam menit saat ini (Contoh: 07:45 -> 745)
+        const jamMenitSekarangAngka =
+          sekarang.getHours() * 100 + sekarang.getMinutes();
 
-        // DI SINI LOGIKA RESPONS INSTAN: Berjalan tiap 1 detik untuk menangkap waktu perubahan status secara live
-        if (idJadwalTerakhir !== idJadwalSekarang) {
-          idJadwalTerakhir = idJadwalSekarang;
+        jadwal.forEach((item, index) => {
+          let tombolHtml = "";
+          let statusBuka = false;
 
-          if (jadwalAktif) {
-            // Detik ini masuk jadwal: Ganti kotak kosong menjadi iframe secara real-time
-            wrapperArea.style.display = "block";
-            noScheduleArea.style.display = "none";
-            btnResetCache.style.display = "inline-block";
-            singleHelperText.style.setProperty("display", "flex", "important");
-
-            liveIndicator.classList.remove("off");
-            document.getElementById("current-mapel").className = "text-success";
-            document.getElementById("current-mapel").innerText =
-              `Sesi ${jadwalAktif.sesi} - ${jadwalAktif.mapel} (${formatTampilanJam(jadwalAktif.mulai)} - ${formatTampilanJam(jadwalAktif.selesai)})`;
-
-            const cacheBuster = `cachebuster=${sekarang.getTime()}`;
-            iframeElement.src = bangunUrlSpreadsheet(jadwalAktif, cacheBuster);
-          } else {
-            // Detik ini waktu habis / belum masuk: Sembunyikan isi iframe seketika
-            iframeElement.src = "about:blank";
-            wrapperArea.style.display = "none";
-            noScheduleArea.style.display = "flex";
-            btnResetCache.style.display = "none";
-            singleHelperText.style.setProperty("display", "none", "important");
-
-            liveIndicator.classList.add("off");
-            document.getElementById("current-mapel").className =
-              "text-secondary";
-            document.getElementById("current-mapel").innerText =
-              "Tidak Ada Ujian Berlangsung";
+          // LOGIKA PENGECEKAN WAKTU
+          if (tanggalSekarangStr > item.tgl) {
+            // 1. Jika tanggal hari ini sudah melewati tanggal jadwal -> Buka (Jadwal Lewat)
+            statusBuka = true;
+          } else if (tanggalSekarangStr === item.tgl) {
+            // 2. Jika hari ini adalah hari ujian -> Cek apakah jam sekarang sudah masuk jam mulai ujian
+            if (jamMenitSekarangAngka >= item.mulai) {
+              statusBuka = true;
+            }
           }
 
-          const timeLog =
-            String(sekarang.getHours()).padStart(2, "0") +
-            ":" +
-            String(sekarang.getMinutes()).padStart(2, "0");
-          document.getElementById("refresh-status").innerHTML =
-            `<i class="fas fa-check-circle me-1"></i>Terakhir Diperbarui: ${timeLog} WIB`;
-        }
+          // JIKA LINK BELUM DIMASUKKAN SAMA SEKALI
+          if (!item.link || item.link.trim() === "") {
+            tombolHtml = `
+              <button disabled class="btn btn-sm btn-buka disabled px-3 py-2">
+                <i class="fas fa-lock me-1"></i> Belum Tersedia
+              </button>
+            `;
+          }
+          // JIKA LINK ADA TAPI BELUM WAKTUNYA UJIAN
+          else if (!statusBuka) {
+            tombolHtml = `
+              <button disabled class="btn btn-sm btn-buka disabled px-3 py-2">
+                <i class="fas fa-clock me-1"></i> Belum Waktunya
+              </button>
+            `;
+          }
+          // JIKA LINK ADA DAN SUDAH MASUK/MELEWATI JAM JADWAL
+          else {
+            tombolHtml = `
+              <a href="${item.link}" target="_blank" class="btn btn-sm btn-buka px-3 py-2">
+                <i class="fas fa-external-link-alt me-1"></i> Buka Pantauan
+              </a>
+            `;
+          }
+
+          const barisHtml = `
+            <tr>
+              <td class="fw-bold text-secondary">${index + 1}</td>
+              <td class="fw-semibold">${formatHariTanggal(item.tgl)}</td>
+              <td>
+                <span class="badge bg-secondary mb-1 d-block" style="max-width: fit-content;">Sesi ${item.sesi}</span>
+                <small class="text-muted d-block"><i class="far fa-clock me-1"></i>${formatJam(item.mulai)} - ${formatJam(item.selesai)}</small>
+              </td>
+              <td><strong class="text-success">${item.mapel}</strong></td>
+              <td class="text-center">${tombolHtml}</td>
+            </tr>
+          `;
+          tabelBody.insertAdjacentHTML("beforeend", barisHtml);
+        });
       }
 
-      function autoRefreshDataIframe() {
-        const jadwalAktif = dapatkanJadwalSekarang();
-        if (jadwalAktif) {
-          const sekarang = new Date();
-          const cacheBuster = `cachebuster=${sekarang.getTime()}`;
-          iframeElement.src = bangunUrlSpreadsheet(jadwalAktif, cacheBuster);
+      function updateJam() {
+        const sekarang = new Date();
+        document.getElementById("live-clock").innerHTML =
+          `<i class="fas fa-clock me-2"></i>${sekarang.toLocaleTimeString("id-ID")} WIB`;
 
-          const timeLog =
-            String(sekarang.getHours()).padStart(2, "0") +
-            ":" +
-            String(sekarang.getMinutes()).padStart(2, "0");
-          document.getElementById("refresh-status").innerHTML =
-            `<i class="fas fa-check-circle me-1"></i>Terakhir Diperbarui: ${timeLog} WIB`;
-        }
+        // Panggil renderTabel setiap menit/detik agar status tombol berubah otomatis tanpa refresh halaman saat jam berganti
+        renderTabel();
       }
-
-      function hardResetCache() {
-        const jadwalAktif = dapatkanJadwalSekarang();
-        if (!jadwalAktif) return;
-
-        localStorage.clear();
-        sessionStorage.clear();
-
-        const ultraToken = `nocache=${new Date().getTime()}-${Math.floor(Math.random() * 1000)}`;
-        iframeElement.src = bangunUrlSpreadsheet(jadwalAktif, ultraToken);
-
-        const now = new Date();
-        const timeLog =
-          String(now.getHours()).padStart(2, "0") +
-          ":" +
-          String(now.getMinutes()).padStart(2, "0") +
-          ":" +
-          String(now.getSeconds()).padStart(2, "0");
-        document.getElementById("refresh-status").innerHTML =
-          `<span class="text-danger fw-bold">Cache Direset: ${timeLog}</span>`;
-
-        alert(
-          "Cache browser dibersihkan! Frame dipaksa mengambil pembaruan langsung dari server.",
-        );
-      }
-
-      // Interval pemantau detik demi detik (Instan tanpa reload)
-      setInterval(periksaDanUpdateTampilan, 1000);
-      setInterval(autoRefreshDataIframe, 60000);
 
       window.onload = function () {
-        periksaDanUpdateTampilan();
+        updateJam();
+        setInterval(updateJam, 1000); // Sinkronisasi jam dan status tombol setiap 1 detik
       };
     </script>
   </body>
